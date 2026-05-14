@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 
 def calculate_all_metrics(y_true, y_pred):
-    # Sıfıra bölünme hatalarını engellemek için küçük bir epsilon
+    # Sıfıra bölünme hatalarını engellemek için
     epsilon = 1e-10
     
     mae = np.mean(np.abs(y_true - y_pred))
@@ -35,12 +35,12 @@ def generate_final_benchmark():
     os.makedirs('reports', exist_ok=True)
     datasets = ['m5_hobbies', 'etth1', 'airpassengers']
     
-    # Tüm potansiyel modeller (model_training.py ve chronos_benchmark.py çıktıları)
+    # Tüm potansiyel modeller
     models = ['AutoARIMA', 'AutoETS', 'NBEATS', 'LSTM', 'GRU', 'Chronos']
     summary_list = []
 
     for name in datasets:
-        print(f"📊 Rapor Hazırlanıyor: {name.upper()}")
+        print(f"Rapor Hazırlanıyor: {name.upper()}")
         
         try:
             # Dosyaları yükle (model_training.py artık _preds.csv olarak kaydediyor)
@@ -48,7 +48,7 @@ def generate_final_benchmark():
             chronos_path = f'predictions/{name}_chronos_only.csv'
             
             if not os.path.exists(base_path) or not os.path.exists(chronos_path):
-                print(f"⚠️ {name} için dosyalar eksik, atlanıyor...")
+                print(f"{name} için dosyalar eksik, atlanıyor...")
                 continue
 
             base_df = pd.read_csv(base_path)
@@ -70,7 +70,7 @@ def generate_final_benchmark():
                     metrics['Model'] = model
                     summary_list.append(metrics)
 
-            # 2. Görselleştirme (Daha İyi Grafik)
+            # 2. Görselleştirme
             plt.figure(figsize=(14, 7))
             # Her veri setinden rastgele/ilk başarılı örneği al
             sample_id = full_df['unique_id'].unique()[0]
@@ -90,7 +90,7 @@ def generate_final_benchmark():
             plt.close()
 
         except Exception as e:
-            print(f"❌ {name} işlenirken hata: {e}")
+            print(f"{name} işlenirken hata: {e}")
 
     # Final Tablo Kaydı
     if summary_list:
@@ -99,11 +99,11 @@ def generate_final_benchmark():
         report_df.to_csv('reports/complete_benchmark_results.csv', index=False)
         
         print("\n" + "="*50)
-        print("🏆 NİHAİ SONUÇLAR")
+        print("NİHAİ SONUÇLAR")
         print("="*50)
         print(report_df.to_string(index=False))
     else:
-        print("🚨 Hiç sonuç üretilemedi! Lütfen tahmin dosyalarını kontrol et.")
+        print("Hiç sonuç üretilemedi! Lütfen tahmin dosyalarını kontrol et.")
 
 if __name__ == '__main__':
     generate_final_benchmark()

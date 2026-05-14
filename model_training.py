@@ -31,7 +31,7 @@ class BenchmarkSystem:
 
         for ds in datasets:
             name, h, freq = ds['name'], ds['h'], ds['freq']
-            print(f"\n🚀 TRAINING: {name.upper()}")
+            print(f"\nTRAINING: {name.upper()}")
 
             train_df = pd.read_csv(f'data/{name}_train.csv')
             test_df = pd.read_csv(f'data/{name}_test.csv')
@@ -61,7 +61,7 @@ class BenchmarkSystem:
             
             # final_report.py ile uyumlu isim
             final_output.to_csv(f'predictions/{name}_preds.csv', index=False)
-            print(f"✅ {name} eğitildi ve kaydedildi.")
+            print(f"{name} eğitildi ve kaydedildi.")
 
 if __name__ == '__main__':
     BenchmarkSystem().run_benchmark()

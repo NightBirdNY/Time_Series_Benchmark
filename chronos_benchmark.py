@@ -7,7 +7,7 @@ from chronos import ChronosPipeline
 
 def run_adaptive_chronos():
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"🚀 GPU: {torch.cuda.get_device_name(0)} | Limitler zorlanıyor...")
+    print(f"GPU: {torch.cuda.get_device_name(0)}")
 
     pipeline = ChronosPipeline.from_pretrained(
         "amazon/chronos-t5-small",
@@ -21,7 +21,7 @@ def run_adaptive_chronos():
         {'name': 'airpassengers', 'h': 12, 'freq': 'MS'}
     ]
 
-    # Başlangıç batch boyutu (İstediğin gibi 64'ten başlatıyoruz!)
+    # Başlangıç batch boyutu
     INITIAL_BATCH_SIZE = 64 
 
     for ds in datasets:
@@ -29,7 +29,7 @@ def run_adaptive_chronos():
         df_path = f'data/{name}_train.csv'
         if not os.path.exists(df_path): continue
         
-        print(f"\n📊 VERİ SETİ: {name.upper()}")
+        print(f"\nVERİ SETİ: {name.upper()}")
         train_df = pd.read_csv(df_path)
         start_time = time.time()
 
@@ -47,22 +47,20 @@ def run_adaptive_chronos():
                 with torch.no_grad():
                     forecasts = pipeline.predict(batch, h)
                     all_forecasts.extend(forecasts.numpy())
-                
-                # Başarılı olduysa ilerle
                 i += batch_size
                 if i % 128 == 0 or i >= len(all_series):
-                    print(f"✅ İlerleme: {min(i, len(uids))} / {len(uids)} (Batch Size: {batch_size})")
+                    print(f"İlerleme: {min(i, len(uids))} / {len(uids)} (Batch Size: {batch_size})")
 
             except RuntimeError as e:
                 if "out of memory" in str(e).lower():
                     print(f"⚠️  OOM Hatası! Batch boyutu {batch_size}'den {batch_size // 2}'ye düşürülüyor...")
-                    torch.cuda.empty_cache() # VRAM'i temizle
-                    batch_size //= 2 # Batch boyutunu yarıya indir
+                    torch.cuda.empty_cache()
+                    batch_size //= 2
                     if batch_size < 1:
                         print("🚨 Kritik Hata: Batch boyutu 1 bile sığmıyor!")
                         break
                 else:
-                    raise e # Başka bir hata varsa fırlat
+                    raise e 
 
         # Sonuçları Kaydet
         last_dates = train_df.groupby('unique_id')['ds'].max().map(pd.to_datetime).to_dict()
@@ -74,7 +72,7 @@ def run_adaptive_chronos():
 
         duration = time.time() - start_time
         pd.concat(results).to_csv(f'predictions/{name}_chronos_only.csv', index=False)
-        print(f"🎉 {name} Bitti! Süre: {duration:.2f} sn.")
+        print(f"{name} Bitti! Süre: {duration:.2f} sn.")
 
 if __name__ == '__main__':
     run_adaptive_chronos()
