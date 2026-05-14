@@ -31,6 +31,7 @@ pip install -r requirements.txt
 
 (Gereksinimler: pandas, numpy, torch, statsforecast, neuralforecast, chronos-forecasting, matplotlib, scikit-learn)
 ⚙️ Benchmark Pipeline (Kullanım)
+```
 
 Proje modüler bir mimariye sahiptir. İşlemleri sırasıyla çalıştırabilirsiniz:
 
