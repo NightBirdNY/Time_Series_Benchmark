@@ -1,0 +1,13 @@
+# Sanal Ortam
+venv/
+.env
+
+# Python Gereksizleri
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Veri ve Sonuçlar
+data/
+predictions/
+lightning_logs/

@@ -1,0 +1,20 @@
+# Temel Veri İşleme ve Analiz
+pandas
+numpy
+scikit-learn
+matplotlib
+
+# Veri Setleri (M5 ve ETT için)
+datasetsforecast
+
+# İstatistiksel Modeller (CPU Hızlandırmalı)
+statsforecast
+
+# Derin Öğrenme Modelleri (GPU Hızlandırmalı)
+neuralforecast
+torch
+accelerate
+
+# Foundation Model (Amazon Chronos)
+chronos-forecasting
+transformers
